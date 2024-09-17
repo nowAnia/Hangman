@@ -6,7 +6,7 @@ public class Box {
     private TextArea textArea;
     private String containLetter;
 
-    public Box () {
+    public Box() {
         textArea = new TextArea();
     }
 

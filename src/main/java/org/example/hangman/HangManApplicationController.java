@@ -39,7 +39,7 @@ public class HangManApplicationController {
 
     private ArrayList<Box> listOfBoxes;
 
-    private  int succesfullyEntered = 0;
+    private int succesfullyEntered = 0;
 
 
     @FXML
@@ -79,6 +79,7 @@ public class HangManApplicationController {
             i++;
         }
     }
+
     private void clearGame() {
         word.getChildren().clear();
         enteredLetter.clear();
@@ -100,9 +101,9 @@ public class HangManApplicationController {
                         t.setDisable(false);
                     }
                     for (var box : listOfBoxes) {
-                            box.getTextArea().setBackground(Background.fill(Paint.valueOf("green")));
-                            box.getTextArea().setText(box.getContainLetter());
-                            box.getTextArea().setDisable(false);
+                        box.getTextArea().setBackground(Background.fill(Paint.valueOf("green")));
+                        box.getTextArea().setText(box.getContainLetter());
+                        box.getTextArea().setDisable(false);
                     }
                     success();
                 } else {
@@ -139,8 +140,8 @@ public class HangManApplicationController {
                         default -> failure();
                     }
                 }
-                if (succesfullyEntered == chosenWord.length()  )  {
-                  success();
+                if (succesfullyEntered == chosenWord.length()) {
+                    success();
                 }
                 enteredWord.setText("");
                 enteredLetter.setText("");
@@ -153,7 +154,7 @@ public class HangManApplicationController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, " You lost. Would you like to try again?  ", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
-            System.out.println( "You want play again");
+            System.out.println("You want play again");
             startGame();
         }
         if (alert.getResult() == ButtonType.NO) {
@@ -166,7 +167,7 @@ public class HangManApplicationController {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, " Congratulations .You won !!!\n Play again? ", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
-            System.out.println( "You want play again");
+            System.out.println("You want play again");
             startGame();
         }
         if (alert.getResult() == ButtonType.NO) {
