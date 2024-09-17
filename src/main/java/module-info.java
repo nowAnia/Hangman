@@ -1,8 +1,8 @@
-module org.example.hangmen {
+module org.example.hangman {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens org.example.hangmen to javafx.fxml;
-    exports org.example.hangmen;
+    opens org.example.hangman to javafx.fxml;
+    exports org.example.hangman;
 }

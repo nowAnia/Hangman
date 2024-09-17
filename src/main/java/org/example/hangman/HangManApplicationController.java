@@ -1,4 +1,4 @@
-package org.example.hangmen;
+package org.example.hangman;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -7,20 +7,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class HelloController {
+public class HangManApplicationController {
     @FXML
     public Image imageOne;
     @FXML

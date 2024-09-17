@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.control.TextField?>
 <BorderPane
-        fx:controller="org.example.hangmen.HelloController"
+        fx:controller="org.example.hangman.HangManApplicationController"
         xmlns:fx="http://javafx.com/fxml">
     <top>
         <VBox alignment="CENTER">

@@ -1,4 +1,4 @@
-package org.example.hangmen;
+package org.example.hangman;
 
 import javafx.scene.control.TextArea;
 

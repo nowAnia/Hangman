@@ -1,4 +1,4 @@
-package org.example.hangmen;
+package org.example.hangman;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.io.BufferedReader;
