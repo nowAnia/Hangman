@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.TextField?>
+<BorderPane
+        fx:controller="org.example.hangmen.HelloController"
+        xmlns:fx="http://javafx.com/fxml">
+    <top>
+        <VBox alignment="CENTER">
+            <Label alignment="CENTER" text=" HangMan Game">
+                <font>
+                    <Font name="Times New Roman bold" size="30"
+                    />
+                </font>
+            </Label>
+        </VBox>
+    </top>
+    <center>
+        <VBox alignment="CENTER" spacing="30">
+            <FlowPane fx:id="word" alignment="CENTER" hgap="10" vgap="10">
+            </FlowPane>
+            <GridPane hgap="10" alignment="CENTER">
+                <Label text="Enter Letter: " GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="enteredLetter" onKeyReleased="#handleKeyReleased" prefWidth="30" GridPane.rowIndex="0"
+                           GridPane.columnIndex="1"/>
+                <Label text="Enter Word: " GridPane.rowIndex="0" GridPane.columnIndex="2"/>
+                <TextField fx:id="enteredWord" onKeyReleased="#handleKeyReleased" prefWidth="100" GridPane.rowIndex="0"
+                           GridPane.columnIndex="3"/>
+                <Label fx:id="information" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+            </GridPane>
+        </VBox>
+    </center>
+    <bottom>
+        <FlowPane alignment="CENTER">
+            <BorderPane.margin>
+                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0"/>
+            </BorderPane.margin>
+            <StackPane fx:id="stack">
+                <ImageView fx:id="imageView" fitHeight="200" fitWidth="120">
+                    <Image fx:id="imageOne" url="@pictureOne.png" requestedHeight="200" requestedWidth="120"/>
+                </ImageView>
+            </StackPane>
+        </FlowPane>
+    </bottom>
+</BorderPane>
