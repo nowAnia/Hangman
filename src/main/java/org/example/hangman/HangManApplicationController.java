@@ -40,6 +40,7 @@ public class HangManApplicationController {
     private ArrayList<Box> listOfBoxes;
 
     private int succesfullyEntered = 0;
+    private RandomWords randomWords;
 
 
     @FXML
@@ -51,6 +52,7 @@ public class HangManApplicationController {
         imageSix = new Image(Objects.requireNonNull(getClass().getResource("pictureFive.png")).toString());
         imageSeven = new Image(Objects.requireNonNull(getClass().getResource("pictureSix.png")).toString());
         imageSeven = new Image(Objects.requireNonNull(getClass().getResource("pictureSeven.png")).toString());
+        randomWords = new RandomWords();
         startGame();
     }
 
@@ -59,25 +61,20 @@ public class HangManApplicationController {
         succesfullyEntered = 0;
         imageView.setImage(imageOne);
 
-        FlowPane flowPane = word;
-        ChosenWord chosenWord = new ChosenWord();
-        System.out.println(chosenWord.getSelectedWord());
-        this.chosenWord = chosenWord.getSelectedWord();
-        int amountOfWords = chosenWord.getSelectedWord().length();
+        chosenWord = randomWords.pickRandomWord();
+        System.out.println(chosenWord);
 
-        int i = 0;
         listOfBoxes = new ArrayList<>();
-        while (i < amountOfWords) {
-            Box text = new Box();
-            text.getTextArea().setDisable(true);
-            String letter = Character.toString(chosenWord.getSelectedWord().charAt(i));
 
-            text.setContainLetter(letter.toUpperCase());
-            text.getTextArea().setPrefSize(30.00, 30.00);
-            listOfBoxes.add(text);
-            flowPane.getChildren().add(text.getTextArea());
-            i++;
-        }
+        chosenWord.chars()
+                .mapToObj(charAsInt -> (char) charAsInt)
+                .forEach(
+                        c -> {
+                            Box textBox = new Box(c);
+                            listOfBoxes.add(textBox);
+                            word.getChildren().add(textBox.getTextArea());
+                        }
+                );
     }
 
     private void clearGame() {

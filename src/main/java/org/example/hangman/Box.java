@@ -6,8 +6,12 @@ public class Box {
     private TextArea textArea;
     private String containLetter;
 
-    public Box() {
+    public Box(char letter) {
         textArea = new TextArea();
+        textArea.setPrefSize(30.00, 30.00);
+        textArea.setDisable(true);
+
+        containLetter = String.valueOf(letter).toUpperCase();
     }
 
     public TextArea getTextArea() {
@@ -18,7 +22,4 @@ public class Box {
         return containLetter;
     }
 
-    public void setContainLetter(String containLetter) {
-        this.containLetter = containLetter;
-    }
 }
