@@ -25,11 +25,11 @@ public class HangManApplicationController {
     @FXML
     private FlowPane word;
     @FXML
-    private TextField enteredWord;
+    private TextField wordTextField;
     @FXML
-    private TextField enteredLetter;
+    private TextField letterTextField;
     private String chosenWord;
-    private int counter = 0;
+    private int mistakes = 0;
     private Image imageTwo;
     private Image imageThree;
     private Image imageFour;
@@ -37,14 +37,17 @@ public class HangManApplicationController {
     private Image imageSix;
     private Image imageSeven;
 
-    private ArrayList<Box> listOfBoxes;
+    private HangManImage hangManImage;
 
-    private int succesfullyEntered = 0;
+    private ArrayList<LetterBox> listOfLetterBoxes;
+
+    private int correctGuesses = 0;
     private RandomWords randomWords;
 
 
     @FXML
     public void initialize() throws IOException {
+        hangManImage = new HangManImage();
         imageTwo = new Image(Objects.requireNonNull(getClass().getResource("pictureOne.png")).toString());
         imageThree = new Image(Objects.requireNonNull(getClass().getResource("pictureTwo.png")).toString());
         imageFour = new Image(Objects.requireNonNull(getClass().getResource("pictureThree.png")).toString());
@@ -56,98 +59,109 @@ public class HangManApplicationController {
         startGame();
     }
 
-    private void startGame() throws IOException {
+    private void startGame() {
         clearGame();
-        succesfullyEntered = 0;
+        correctGuesses = 0;
         imageView.setImage(imageOne);
 
         chosenWord = randomWords.pickRandomWord();
         System.out.println(chosenWord);
 
-        listOfBoxes = new ArrayList<>();
+        listOfLetterBoxes = new ArrayList<>();
 
         chosenWord.chars()
                 .mapToObj(charAsInt -> (char) charAsInt)
                 .forEach(
                         c -> {
-                            Box textBox = new Box(c);
-                            listOfBoxes.add(textBox);
-                            word.getChildren().add(textBox.getTextArea());
+                            LetterBox textLetterBox = new LetterBox(c);
+                            listOfLetterBoxes.add(textLetterBox);
+                            word.getChildren().add(textLetterBox.getTextArea());
                         }
                 );
     }
 
     private void clearGame() {
         word.getChildren().clear();
-        enteredLetter.clear();
-        enteredWord.clear();
-        counter = 0;
+        letterTextField.clear();
+        wordTextField.clear();
+        mistakes = 0;
     }
 
     @FXML
     public void handleKeyReleased(KeyEvent keyEvent) throws IOException {
-        String enteredW = enteredWord.getText().toUpperCase();
-        String enteredL = enteredLetter.getText().toUpperCase();
+        String enteredWord = this.wordTextField.getText().toUpperCase();
+        String enteredLetter = this.letterTextField.getText().toUpperCase();
 
         if (keyEvent.getCode().equals(KeyCode.ENTER)) {
-            if (!enteredW.isEmpty()) {
-                if (enteredW.equals(chosenWord.toUpperCase())) {
-                    for (var child : word.getChildren()) {
-                        TextArea t = (TextArea) child;
-                        t.setBackground(Background.fill(Paint.valueOf("green")));
-                        t.setDisable(false);
-                    }
-                    for (var box : listOfBoxes) {
-                        box.getTextArea().setBackground(Background.fill(Paint.valueOf("green")));
-                        box.getTextArea().setText(box.getContainLetter());
-                        box.getTextArea().setDisable(false);
-                    }
-                    success();
-                } else {
-                    imageView.setImage(imageSeven);
-                    failure();
-                }
+            if (!enteredWord.isEmpty()) {
+                handleEnteredWord();
             }
-            if (!enteredL.isEmpty()) {
-                if (enteredL.length() > 1) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING, " Enter only one letter ");
-                    alert.showAndWait();
-                }
-                boolean flag = true;
-                for (var box : listOfBoxes) {
-                    System.out.println(box.getContainLetter());
-                    if (box.getContainLetter().toUpperCase().equals(enteredL)) {
-                        box.getTextArea().setBackground(Background.fill(Paint.valueOf("green")));
-                        box.getTextArea().setText(box.getContainLetter());
-                        succesfullyEntered++;
+            if (!enteredLetter.isEmpty()) {
+                handleEnteredLetter();
 
-                        box.getTextArea().setDisable(false);
-                        flag = false;
-                    }
-                }
-                if (flag) {
-                    counter++;
-                    switch (counter) {
-                        case 1 -> imageView.setImage(imageTwo);
-                        case 2 -> imageView.setImage(imageThree);
-                        case 3 -> imageView.setImage(imageFour);
-                        case 4 -> imageView.setImage(imageFive);
-                        case 5 -> imageView.setImage(imageSix);
-                        case 6 -> imageView.setImage(imageSeven);
-                        default -> failure();
-                    }
-                }
-                if (succesfullyEntered == chosenWord.length()) {
-                    success();
-                }
-                enteredWord.setText("");
-                enteredLetter.setText("");
             }
         }
     }
 
+    private void handleEnteredWord() {
+        String enteredWord = this.wordTextField.getText().toUpperCase();
+        if (enteredWord.equals(chosenWord.toUpperCase())) {
+            for (var child : word.getChildren()) {
+                TextArea t = (TextArea) child;
+                t.setBackground(Background.fill(Paint.valueOf("green")));
+                t.setDisable(false);
+            }
+            for (var box : listOfLetterBoxes) {
+                box.markGuessed();
+            }
+            success();
+        } else {
+            imageView.setImage(imageSeven);
+            failure();
+        }
+    }
 
-    public void failure() throws IOException {
+    private void handleEnteredLetter() {
+        String enteredLetter = this.letterTextField.getText().toUpperCase();
+
+        if (enteredLetter.length() > 1) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, " Enter only one letter ");
+            alert.showAndWait();
+        }
+
+        boolean incorrectGuess = true;
+
+        for (var box : listOfLetterBoxes) {
+            if (!box.isGuessed() && box.matchesLetter(enteredLetter)) {
+                box.markGuessed();
+
+                correctGuesses++;
+                incorrectGuess = false;
+            }
+        }
+
+        if (incorrectGuess) {
+            mistakes++;
+            if (mistakes == HangManImage.MAX_IMAGE_INDEX) {
+                failure();
+            } else {
+                hangManImage.increaseCurrentImageIndex();
+                imageView.setImage(hangManImage.getCurrentImage());
+            }
+        }
+
+        if (correctGuesses == chosenWord.length()) {
+            success();
+        }
+
+        this.wordTextField.setText("");
+        this.letterTextField.setText("");
+    }
+
+
+
+
+    public void failure() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, " You lost. Would you like to try again?  ", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
@@ -160,7 +174,7 @@ public class HangManApplicationController {
         }
     }
 
-    public void success() throws IOException {
+    public void success() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION, " Congratulations .You won !!!\n Play again? ", ButtonType.YES, ButtonType.NO);
         alert.showAndWait();
         if (alert.getResult() == ButtonType.YES) {
